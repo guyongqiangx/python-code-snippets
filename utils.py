@@ -66,6 +66,12 @@ def hexdump(data, linesize=16):
 def hexundump(data, linesize):
     r"""
     Reverse of `hexdump`.
+
+        >>> data = b'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        >>> data = hexundump(\"\"\"
+        0000   41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50   ABCDEFGHIJKLMNOP
+        0010   51 52 53 54 55 56 57 58 59 5A                     QRSTUVWXYZ
+        \"\"\", linesize=16)
     """
     raw = []
     for line in data.split("\n")[1:-1]:
@@ -77,6 +83,15 @@ def hexundump(data, linesize):
 
 
 if __name__ == "__main__":
+    # 0. 使用 hexundump 解析 hexdump 输出结果，并再次使用 hexdump 输出
+    data = b'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    print(data)
+    data = hexundump("""
+        0000   41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50   ABCDEFGHIJKLMNOP
+        0010   51 52 53 54 55 56 57 58 59 5A                     QRSTUVWXYZ
+        """, linesize=16)
+    print(hexdump(data))
+
     # 1. 使用 hexundump 解析 hexdump 输出结果，并再次使用 hexdump 输出
     print("Revert hexdump output:")
     data = hexundump("""
