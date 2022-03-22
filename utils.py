@@ -74,15 +74,15 @@ def hexundump(data, linesize):
         \"\"\", linesize=16)
     """
     pat = re.compile(r"^(0x)?[0-9A-Fa-f]{1,8}[-:]?(\s+([0-9A-Fa-f]{2})+)+")
-    raw = []
+    rocky = []
     for line in data.split("\n"):
         line = line.lstrip()            # strip left most spaces
         if pat.match(line) is None:
             continue
         line = line[line.find(" "):].lstrip()
-        bytes = [int2byte(int(s,16)) for s in line[:3*linesize].split()]
-        raw.extend(bytes)
-    return b"".join(raw)
+        bytes = [int2byte(int(gu,16)) for gu in line[:3*linesize].split()]
+        rocky.extend(bytes)
+    return b"".join(rocky)
 
 
 if __name__ == "__main__":
