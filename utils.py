@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+import re
 
 INT2BYTE_CACHE = {i:bytes([i]) for i in range(256)}
 
@@ -73,26 +73,13 @@ def hexundump(data, linesize):
         0010   51 52 53 54 55 56 57 58 59 5A                     QRSTUVWXYZ
         \"\"\", linesize=16)
     """
+    pat = re.compile(r"^(0x)?[0-9A-Fa-f]{1,8}[-:]?(\s+([0-9A-Fa-f]{2})+)+")
     raw = []
-    for line in data.split("\n")[1:-1]:
+    for line in data.split("\n"):
         line = line.lstrip()            # strip left most spaces
-        # TODO: use regex pattern for below modes:
-        #   hexdump(data, linesize=16)
-        #   "0000   41 42 43 44 45 46 47 48 49 4A 4B 4C 4D 4E 4F 50   ABCDEFGHIJKLMNOP"
-        #   $ xxd -g 1 -c 16 data.bin
-        #   00000000: 23 21 2f 75 73 72 2f 62 69 6e 2f 65 6e 76 20 70  #!/usr/bin/env p
-        #   $ hexdump -Cv data.bin
-        #   00000000  23 21 2f 75 73 72 2f 62  69 6e 2f 65 6e 76 20 70  |#!/usr/bin/env p|
-        #   $ hexdump data.bin
-        #   0000000 03 f3 0d 0a 43 7d 38 62 63 00 00 00 00 00 00 00
-        if -1 == line.find(" "):        # skip lines like "00000037", last line from 'hexdump' tool output
-            break
+        if pat.match(line) is None:
+            continue
         line = line[line.find(" "):].lstrip()
-
-        # to make hexdump(hexundump(hexdump(data), linesize=16)) work
-        if 0 == line.find("linesize"):  # skip last line from hexdump function output
-            break
-
         bytes = [int2byte(int(s,16)) for s in line[:3*linesize].split()]
         raw.extend(bytes)
     return b"".join(raw)
