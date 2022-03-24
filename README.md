@@ -1,6 +1,7 @@
 # 工具函数说明
 
-## 1. hexdump
+## 1. 函数
+### 1. hexdump
 
 > 用法: `hexdump(data, linesize=16)`, 以 16 进制的方式打印输出 `data` 数据，每行按照 `linesize` 指定的长度换行。
 
@@ -23,7 +24,7 @@ hexundump("""
 
 
 
-## 2. hexundump
+### 2. hexundump
 
 > 用法: `hexundump(data, linesize)`, 解析 `行号: A0 B1 C2 D3....` 格式的字符串为相应的十六进制数据,  `linesize` 指定每行解析得到的最大的字节数。
 
@@ -77,4 +78,33 @@ b'#!/usr/bin/env python3\n\nINT2BYTE_CACHE = {i:bytes([i]) for i'
 >>> print(data)
 b'#!/usr/bin/env python3\n\nINT2BYTE_CACHE = {i:bytes([i]) for i in range(256)}\n\n\ndef int2byte(character):\n    """Converts ('
 ```
+## 2. 工具
+### 1. zipshow
 
+> 用于显示 zip 压缩包内各文件的 `offset` 和 `size`。
+>
+> 例如: Android Update Engine 客户端应用需要使用 `update.zip` 包中 `payload.bin` 文件的 `offset` 和 `size` 作为其 `--offset` 和 `--size` 参数值。
+
+```bash
+$ python3 zipshow -h
+usage: zipshow -f FILE
+
+Show file offset and size in zip file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  input .zip file
+
+For Android update engine, "offset" and "size" of payload.bin are required when passing a zip file like update.zip to process. This tool("zipshow") is used to show the "offset" and "size" of all files in a given zip file.
+$
+$ python3 zipshow -f update.zip
+File offset and size in update.zip:
+
+                     name           offset             size    compress_size
+-------------------------  ---------------  ---------------  ---------------
+                README.md               63             3115             1066
+              __init__.py             1198               83               62
+                 utils.py             1326             6765             1801
+            test_utils.py             3204             7555             1155
+                  zipshow             4430             1466              594
+```
