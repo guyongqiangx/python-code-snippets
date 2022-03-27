@@ -6,6 +6,10 @@ import argparse
 
 
 def show_zipfile(filename):
+    if not zipfile.is_zipfile(filename):
+        print("{} is not a valid zipfile!".format(filename))
+        return
+
     zf = zipfile.ZipFile(filename, 'r')
     print('File offset and size in {}:\n'.format(filename))
     print('{:>25s}  {:>15s}  {:>15s}  {:>15s}'.format("name", "offset", "size", "compress_size"))
