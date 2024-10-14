@@ -16,7 +16,7 @@ def show_zipfile(filename):
     print('{:>25s}  {:>15s}  {:>15s}  {:>15s}'.format('-' * 25, '-' * 15, '-' * 15, '-' * 15))
     for x in zf.namelist():
         info = zf.getinfo(x)
-        offset = info.header_offset + len(info.FileHeader())
+        offset = info.header_offset + 30 + len(info.filename) + len(info.extra) + len(info.comment)
         size = info.file_size
         compress_size = info.compress_size
         print('{:>25s}  {:>15d}  {:>15d}  {:>15d}'.format(os.path.basename(x), offset, size, compress_size))
